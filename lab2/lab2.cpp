@@ -12,7 +12,7 @@ int init_map(char a, vector<pair<char, int>>* b) {
     b->push_back({ a, 0 });
 }
 
-int search(char a, vector<pair<char, int>> b) {
+int search(char a, const vector<pair<char, int>>& b) {
     for (int i = 0; i < b.size(); i++) {
         if (a == b[i].first) {
             return b[i].second;
@@ -28,7 +28,7 @@ void print(vector<int> num) {
     cout << num[num.size() - 1];
 }
 
-int summ(vector<pair<char, int>> b, char a[100]) {
+int summ(const vector<pair<char, int>>& b, char a[100]) {
     int ans1 = 0;
     vector<int> num1;
     int now_number = 0;
@@ -62,11 +62,12 @@ int summ(vector<pair<char, int>> b, char a[100]) {
     if (ans1 == res) {
         print(num1);
         cout << " = " << res << "\n";
-    };
+    }
+    return 0;
 }
 
 
-int all(vector<pair<char, int>> b, char a[100], int index, int cool[10]) {
+int all(vector<pair<char, int>>& b, char a[100], int index, int cool[10]) {
     if (index == b.size()) {
         summ(b, a);
         return 0;
