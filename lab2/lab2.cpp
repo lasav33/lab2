@@ -10,7 +10,6 @@ int init_map(char a, vector<pair<char, int>>* b) {
         }
     }
     b->push_back({ a, 0 });
-    return 0;
 }
 
 int search(char a, vector<pair<char, int>> b) {
@@ -19,7 +18,6 @@ int search(char a, vector<pair<char, int>> b) {
             return b[i].second;
         }
     }
-    return 0;
 }
 
 void print(vector<int> num) {
@@ -31,12 +29,6 @@ void print(vector<int> num) {
 }
 
 int summ(vector<pair<char, int>> b, char a[100]) {
-    for (int i = 0; i < b.size(); i++) {
-        for (int j = i + 1; j < b.size(); j++) {
-            if (b[i].second == b[j].second) return 0;
-        }
-    }
-
     int ans1 = 0;
     vector<int> num1;
     int now_number = 0;
@@ -59,37 +51,37 @@ int summ(vector<pair<char, int>> b, char a[100]) {
     num1.push_back(now_number);
     i++;
 
-    int ans2 = 0;
-    vector<int> num2;
-    now_number = 0;
+    int res = 0;
     if (search(a[i], b) == 0) return 0;
     while (a[i] != '\n') {
-        now_number *= 10;
-        now_number += search(a[i], b);
+        res *= 10;
+        res += search(a[i], b);
         i++;
     }
-    ans2 += now_number;
-    num2.push_back(now_number);
 
-    if (ans1 == ans2) {
+    if (ans1 == res) {
         print(num1);
-        cout << " = ";
-        print(num2);
-        cout << "\n";
-    }
-    return 0;
+        cout << " = " << res << "\n";
+    };
 }
 
-int all(vector<pair<char, int>> b, char a[100], int index) {
+
+int all(vector<pair<char, int>> b, char a[100], int index, int cool[10]) {
     if (index == b.size()) {
         summ(b, a);
         return 0;
     }
     for (int i = 0; i < 10; i++) {
-        b[index].second = i;
-        all(b, a, index + 1);
+        if (cool[i] == 1) {
+            b[index].second = i;
+            cool[i] = 0;
+            all(b, a, index + 1, cool);
+            cool[i] = 1;
+        }
+
     }
     return 0;
+
 }
 
 void clean(char a[100]) {
@@ -106,6 +98,7 @@ int main()
 {
     vector<pair<char, int>> map;
     char a[100];
+    int cool[10] = { 1,1,1,1,1,1,1,1,1,1 };
     fgets(a, sizeof(a), stdin);
     clean(a);
     int i = 0;
@@ -114,6 +107,5 @@ int main()
         init_map(a[i], &map);
         i++;
     }
-    if (map.size() > 10) return 0;
-    all(map, a, 0);
+    all(map, a, 0, cool);
 }
