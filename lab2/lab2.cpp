@@ -3,6 +3,10 @@
 #include <vector>
 using namespace std;
 
+vector<string> L;                                           
+string R;                                                 
+int need_k[128];                                          
+
 int init_map(char a, vector<pair<char, int>>* b) {
     for (int i = 0; i < b->size(); i++) {
         if (a == (*b)[i].first) {
