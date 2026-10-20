@@ -1,11 +1,12 @@
 ﻿#include <iostream>
 #include <stdio.h>
 #include <vector>
+#include <string>                          
 using namespace std;
 
-vector<string> L;                                           
-string R;                                                 
-int need_k[128];                                          
+vector<string> L;                              
+string R;                                    
+int need_k[128];                     
 
 int init_map(char a, vector<pair<char, int>>* b) {
     for (int i = 0; i < b->size(); i++) {
@@ -14,6 +15,7 @@ int init_map(char a, vector<pair<char, int>>* b) {
         }
     }
     b->push_back({ a, 0 });
+    return 0;
 }
 
 int search(char a, const vector<pair<char, int>>& b) {
@@ -22,6 +24,7 @@ int search(char a, const vector<pair<char, int>>& b) {
             return b[i].second;
         }
     }
+    return 0;
 }
 
 void print(vector<int> num) {
@@ -30,6 +33,24 @@ void print(vector<int> num) {
         cout << " + ";
     }
     cout << num[num.size() - 1];
+}
+
+long long val(const string& w, const vector<pair<char, int>>& b, int k) {
+    long long v = 0, p = 1;
+    int len = w.size();
+    for (int j = len - 1; j >= 0 && len - 1 - j < k; j--) {
+        v += search(w[j], b) * p;
+        p *= 10;
+    }
+    return v;
+}
+
+bool check(const vector<pair<char, int>>& b, int k) {
+    long long mod = 1;
+    for (int i = 0; i < k; i++) mod *= 10;
+    long long s = 0;
+    for (int i = 0; i < L.size(); i++) s += val(L[i], b, k);
+    return s % mod == val(R, b, k);
 }
 
 int summ(const vector<pair<char, int>>& b, char a[100]) {
@@ -80,7 +101,8 @@ int all(vector<pair<char, int>>& b, char a[100], int index, int cool[10]) {
         if (cool[i] == 1) {
             b[index].second = i;
             cool[i] = 0;
-            all(b, a, index + 1, cool);
+            int k = need_k[index + 1];
+            if (k == 0 || check(b, k)) all(b, a, index + 1, cool);
             cool[i] = 1;
         }
 
@@ -106,11 +128,25 @@ int main()
     int cool[10] = { 1,1,1,1,1,1,1,1,1,1 };
     fgets(a, sizeof(a), stdin);
     clean(a);
-    int i = 0;
-    while (a[i] != '\n') {
-        if (a[i] == '+' || a[i] == '=') { i++; continue; }
-        init_map(a[i], &map);
-        i++;
+
+    string cur;
+    for (int i = 0; a[i] != '\n'; i++) {
+        if (a[i] == '+' || a[i] == '=') { L.push_back(cur); cur = ""; }
+        else cur += a[i];
     }
+    R = cur;
+    int maxlen = R.size();
+    for (int i = 0; i < L.size(); i++) if ((int)L[i].size() > maxlen) maxlen = L[i].size();
+    for (int col = 0; col < maxlen; col++) {
+        for (int i = 0; i < L.size(); i++)
+            11:47
+
+
+            if (col < (int)L[i].size()) init_map(L[i][L[i].size() - 1 - col], &map);
+        if (col < (int)R.size()) init_map(R[R.size() - 1 - col], &map);
+        need_k[map.size()] = col + 1;
+    }
+    if (map.size() > 10) return 0;
+
     all(map, a, 0, cool);
 }
