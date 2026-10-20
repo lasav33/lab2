@@ -1,6 +1,7 @@
 ﻿#include <iostream>
 #include <stdio.h>
 #include <vector>
+#include <time.h>
 using namespace std;
 
 int init_map(char a, vector<pair<char, int>>* b) {
@@ -108,5 +109,12 @@ int main()
         init_map(a[i], &map);
         i++;
     }
+    clock_t start = clock();
+
     all(map, a, 0, cool);
+
+    clock_t end = clock();
+    double elapsed = double(end - start) / CLOCKS_PER_SEC;
+
+    printf("\nTime: %.6f seconds\n", elapsed);
 }
