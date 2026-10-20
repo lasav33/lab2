@@ -1,7 +1,8 @@
 ﻿#include <iostream>
 #include <stdio.h>
 #include <vector>
-#include <string>                          
+#include <string> 
+#include <time.h>
 using namespace std;
 
 vector<string> L;                              
@@ -139,14 +140,18 @@ int main()
     for (int i = 0; i < L.size(); i++) if ((int)L[i].size() > maxlen) maxlen = L[i].size();
     for (int col = 0; col < maxlen; col++) {
         for (int i = 0; i < L.size(); i++)
-            11:47
-
-
             if (col < (int)L[i].size()) init_map(L[i][L[i].size() - 1 - col], &map);
         if (col < (int)R.size()) init_map(R[R.size() - 1 - col], &map);
         need_k[map.size()] = col + 1;
     }
     if (map.size() > 10) return 0;
 
+    clock_t start = clock();
+
     all(map, a, 0, cool);
+
+    clock_t end = clock();
+    double elapsed = double(end - start) / CLOCKS_PER_SEC;
+
+    printf("\nTime: %.6f seconds\n", elapsed);
 }
