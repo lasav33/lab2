@@ -1,7 +1,10 @@
 ﻿#include <iostream>
 #include <stdio.h>
 #include <vector>
+#include <time.h>
 using namespace std;
+
+bool found = false;
 
 int init_map(char a, vector<pair<char, int>>* b) {
     for (int i = 0; i < b->size(); i++) {
@@ -76,16 +79,19 @@ int summ(vector<pair<char, int>> b, char a[100]) {
         cout << " = ";
         print(num2);
         cout << "\n";
+        found = true;
     }
     return 0;
 }
 
 int all(vector<pair<char, int>> b, char a[100], int index) {
+    if (found) return 0;
     if (index == b.size()) {
         summ(b, a);
         return 0;
     }
     for (int i = 0; i < 10; i++) {
+        if (found) return 0;
         b[index].second = i;
         all(b, a, index + 1);
     }
@@ -114,6 +120,11 @@ int main()
         init_map(a[i], &map);
         i++;
     }
-    if (map.size() > 10) return 0;
+    if (map.size() > 10) return 0; 
+    clock_t start = clock();
     all(map, a, 0);
+    clock_t end = clock();
+    double elapsed = double(end - start) / CLOCKS_PER_SEC;
+    printf("\nTime: %.6f seconds\n", elapsed);
+    return 0;
 }
